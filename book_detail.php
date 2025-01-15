@@ -2,8 +2,8 @@
   session_start();
   $book_isbn = $_GET['bookisbn'];
   $count = 0;
-  // connecto database
-  $query = "SELECT * FROM books WHERE book_isbn = '$book_isbn'";
+  
+
   $title = "Index";
   require_once "./template/header.php";
   require_once "./functions/database_functions.php";

@@ -47,6 +47,13 @@
 		}
 	}
 
+    if (isset($_GET['delete'])) {
+        $isbnToDelete = $_GET['delete'];
+        if (isset($_SESSION['cart'][$isbnToDelete])) {
+            unset($_SESSION['cart'][$isbnToDelete]);
+        }
+    }
+
 	// print out header here
 	$title = "Your shopping cart";
 	require "./template/header.php";
@@ -62,6 +69,7 @@
 	   			<th>Price</th>
 	  			<th>Quantity</th>
 	   			<th>Total</th>
+                <th>Action</th>
 	   		</tr>
 	   		<?php
 		    	foreach($_SESSION['cart'] as $isbn => $qty){
@@ -73,6 +81,9 @@
 				<td><?php echo "$" . $book['book_price']; ?></td>
 				<td><input type="text" value="<?php echo $qty; ?>" size="2" name="<?php echo $isbn; ?>"></td>
 				<td><?php echo "$" . $qty * $book['book_price']; ?></td>
+                <td>
+                    <a href="cart.php?delete=<?php echo $isbn; ?>" class="btn btn-danger">Delete</a>
+                </td>
 			</tr>
 			<?php } ?>
 		    <tr>
@@ -80,6 +91,7 @@
 		    	<th>&nbsp;</th>
 		    	<th><?php echo $_SESSION['total_items']; ?></th>
 		    	<th><?php echo "$" . $_SESSION['total_price']; ?></th>
+                
 		    </tr>
 	   	</table>
 	   	<input type="submit" class="btn btn-primary" name="save_change" value="Save Changes">

@@ -1,33 +1,49 @@
 <?php
-  session_start();
-  $count = 0;
-  // connecto database
-  
-  $title = "Index";
-  require_once "./template/header.php";
-  require_once "./functions/database_functions.php";
-  $conn = db_connect();
-  $row = getAllPub($conn);
+	session_start();
+	require_once "./functions/database_functions.php";
+	$conn = db_connect();
+
+	$query = "SELECT * FROM publisher ORDER BY publisherid";
+	$result = mysqli_query($conn, $query);
+	if(!$result){
+		echo "Can't retrieve data " . mysqli_error($conn);
+		exit;
+	}
+	if(mysqli_num_rows($result) == 0){
+		echo "Empty publisher ! Something wrong! check again";
+		exit;
+	}
+
+	$title = "List Of Publishers";
+	require "./template/header.php";
 ?>
-      <!-- Example row of columns -->
-      <h1>Publisher List</h1>
-    <table border="1" cellpadding="10" cellspacing="0">
-        <thead>
-            <tr>
-                <th>ID</th>
-                <th>Name</th>
-            </tr>
-        </thead>
-        <tbody>
-            <?php foreach($row as $pub) { ?>
-            <tr>
-                <td><?php echo $pub['publisherid']; ?></td>
-                <td><?php echo $pub['publisher_name']; ?></td>
-            </tr>
-            <?php } ?>
-        </tbody>
-    </table>
+	<p class="lead">List of Publisher</p>
+	<ul>
+	<?php 
+		while($row = mysqli_fetch_assoc($result)){
+			$count = 0; 
+			$query = "SELECT publisherid FROM books";
+			$result2 = mysqli_query($conn, $query);
+			if(!$result2){
+				echo "Can't retrieve data " . mysqli_error($conn);
+				exit;
+			}
+			while ($pubInBook = mysqli_fetch_assoc($result2)){
+				if($pubInBook['publisherid'] == $row['publisherid']){
+					$count++;
+				}
+			}
+	?>
+		<li>
+			<span class="badge"><?php echo $count; ?></span>
+		    <a href="bookPerPub.php?pubid=<?php echo $row['publisherid']; ?>"><?php echo $row['publisher_name']; ?></a>
+		</li>
+	<?php } ?>
+		<li>
+			<a href="books.php">List full of books</a>
+		</li>
+	</ul>
 <?php
-  if(isset($conn)) {mysqli_close($conn);}
-  require_once "./template/footer.php";
+	mysqli_close($conn);
+	require "./template/footer.php";
 ?>

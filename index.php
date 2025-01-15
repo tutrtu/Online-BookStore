@@ -14,7 +14,7 @@
       <div class="row">
         <?php foreach($row as $book) { ?>
       	<div class="col-md-3">
-      		<a href="book.php?bookisbn=<?php echo $book['book_isbn']; ?>">
+      		<a href="book_detail.php?bookisbn=<?php echo $book['book_isbn']; ?>">
            <img class="img-responsive img-thumbnail" src="./bootstrap/img/<?php echo $book['book_image']; ?>">
           </a>
       	</div>

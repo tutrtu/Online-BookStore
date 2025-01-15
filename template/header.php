@@ -30,9 +30,9 @@
         <div id="navbar" class="navbar-collapse collapse">
           <ul class="nav navbar-nav navbar-right">
               <!-- link to publiser_list.php -->
-              <li><a href="publisher_list.php"><span class="glyphicon glyphicon-paperclip"></span>&nbsp; Publisher</a></li>
+              <li><a href="publisher.php"><span class="glyphicon glyphicon-paperclip"></span>&nbsp; Publisher</a></li>
               <!-- link to books.php -->
-              <li><a href="books.php"><span class="glyphicon glyphicon-book"></span>&nbsp; Books</a></li>
+              <li><a href="book.php"><span class="glyphicon glyphicon-book"></span>&nbsp; Books</a></li>
               <!-- link to contacts.php -->
               <li><a href="contact.php"><span class="glyphicon glyphicon-phone-alt"></span>&nbsp; Contact</a></li>
               <!-- link to shopping cart -->
@@ -48,7 +48,7 @@
     <div class="jumbotron">
       <div class="container">
         <h1>Welcome to online CSE bookstore</h1>
-        <p class="lead">This site has been made using PHP with MYSQL (procedure functions)!</p>
+        <p class="lead"></p>
         <p>The layout use Bootstrap to make it more responsive. It's just a simple web!</p>
       </div>
     </div>

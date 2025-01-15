@@ -1,4 +1,5 @@
 <?php
+	session_start();
 	$title = "Administration section";
 	require_once "./template/header.php";
 	include "./functions/database_functions.php";

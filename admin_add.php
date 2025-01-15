@@ -4,6 +4,12 @@ require_once "./functions/admin.php";
 $title = "List book";
 require_once "./template/header.php";
 require_once "./functions/database_functions.php";
+//check session
+// Check session for admin authentication
+if (!isset($_SESSION['admin']) || $_SESSION['admin'] !== true) {
+    header("Location: index.php");
+    exit;
+}
 $conn = db_connect();
 ?>
 
