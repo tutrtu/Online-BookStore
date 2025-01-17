@@ -81,6 +81,44 @@
 			return null;
 		}
 	}
+
+	function updateCustomerDetails($conn, $customername, $address, $city, $zip_code, $country) {
+		// Check if customer exists
+		 // Check if customer exists
+		 $check_query = "SELECT customerid FROM customers WHERE name = '$customername'";
+		 $result = mysqli_query($conn, $check_query);
+		 
+		 if(!$result){
+			 echo "Query failed! " . mysqli_error($conn);
+			 exit;
+		 }
+		 
+		 if(mysqli_num_rows($result) > 0) {
+			 // Customer exists - get their ID
+			 $row = mysqli_fetch_assoc($result);
+			 $customer_id = $row['customerid'];
+			 
+			 // Update their details
+			 $update_query = "UPDATE customers SET 
+				 address = '$address',
+				 city = '$city',
+				 zip_code = '$zip_code',
+				 country = '$country'
+				 WHERE customerid = $customer_id";
+				 
+			 $update_result = mysqli_query($conn, $update_query);
+			 
+			 if(!$update_result){
+				 echo "Update failed! " . mysqli_error($conn);
+				 exit;
+			 }
+			 
+			 return $customer_id;
+		 } else {
+			 // Customer doesn't exist - create new
+			 return setCustomerId($customername, $address, $city, $zip_code, $country);
+		 }
+	}
 	function insertIntoOrder($customerid, $total_price, $date, $ship_name, $ship_address, $ship_city, $ship_zip_code, $ship_country){
 		$conn = db_connect();
 		$query = "INSERT INTO orders VALUES ('', '" . $customerid . "', '" . $total_price . "', '" . $date . "', '" . $ship_name . "', '" . $ship_address . "', '" . $ship_city . "', '" . $ship_zip_code . "', '" . $ship_country . "')";
@@ -153,4 +191,27 @@
 		}
 		return $result;
 	}
+
+	function getcustomerorder($conn, $customerid){
+		$query = "SELECT * FROM orders WHERE customerid = '$customerid'";
+		$result = mysqli_query($conn, $query);
+		if(!$result){
+			echo "Can't retrieve data " . mysqli_error($conn);
+			exit;
+		}
+		return $result;
+	}
+
+	//get customer id by name and phone
+	function getcustomeridbyphone($conn, $name, $phone){
+		$query = "SELECT customerid FROM customers WHERE name = '$name' AND phone = '$phone'";
+		$result = mysqli_query($conn, $query);
+		if(!$result){
+			echo "Can't retrieve data " . mysqli_error($conn);
+			exit;
+		}
+		$row = mysqli_fetch_assoc($result);
+		return $row['customerid'];
+	}
+	
 ?>

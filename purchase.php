@@ -43,7 +43,8 @@ if (isset($_SESSION['cart']) && array_count_values($_SESSION['cart'])) {
         <div class="form-group">
             <label for="name" class="control-label col-md-4">Name</label>
             <div class="col-md-4">
-                <input type="text" name="name" class="form-control">
+                <!-- <input type="text" name="name" class="form-control"> -->
+                 <p><?php echo $_SESSION['name']; ?></p>
             </div>
         </div>
 

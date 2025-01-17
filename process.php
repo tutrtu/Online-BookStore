@@ -4,7 +4,7 @@ require_once "./functions/database_functions.php";
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['submit'])) {
     // Get customer input from the form
-    $customername = trim($_POST['name']);
+    $customername = $_SESSION['name'];
     $address = trim($_POST['address']);
     $city = trim($_POST['city']);
     $zip_code = trim($_POST['zip_code']);
@@ -20,16 +20,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['submit'])) {
     //     header("Location: purchase.php"); // Redirect back to purchase page
     //     exit;
     // }
-
+    
     // Connect to the database
     $conn = db_connect();
 
     // Retrieve or create customer ID
-    $customer_id = getCustomerId($customername, $address, $city, $zip_code, $country);
-    if ($customer_id === null) {
-        $customer_id = setCustomerId($customername, $address, $city, $zip_code, $country);
-    }
-    
+    $customer_id = updateCustomerDetails($conn, $customername, $address, $city, $zip_code, $country);
+   $customer_id  = $_SESSION['customerid'];
 
     // Insert order data into the `orders` table
     date_default_timezone_set("Asia/Ho_Chi_Minh");
