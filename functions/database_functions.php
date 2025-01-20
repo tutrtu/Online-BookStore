@@ -213,5 +213,53 @@
 		$row = mysqli_fetch_assoc($result);
 		return $row['customerid'];
 	}
+
+	function getpurchasebyorderid($conn, $orderid){
+		$query = "SELECT * FROM order_items WHERE orderid = '$orderid'";
+		$result = mysqli_query($conn, $query);
+		if(!$result){
+			echo "Can't retrieve data " . mysqli_error($conn);
+			exit;
+		}
+		return $result;
+	}
 	
+	function getcustomerpurchaseorder($conn, $customerid) {
+		$query = "SELECT o.*, oi.book_isbn, oi.item_price, oi.quantity, b.book_title, b.book_image 
+				  FROM orders o 
+				  LEFT JOIN order_items oi ON o.orderid = oi.orderid 
+				  LEFT JOIN books b ON oi.book_isbn = b.book_isbn 
+				  WHERE o.customerid = ? 
+				  ORDER BY o.orderid DESC";
+				  
+		$stmt = mysqli_prepare($conn, $query);
+		mysqli_stmt_bind_param($stmt, "i", $customerid);
+		mysqli_stmt_execute($stmt);
+		$result = mysqli_stmt_get_result($stmt);
+		
+		if(!$result) {
+			throw new Exception("Failed to retrieve purchase history: " . mysqli_error($conn));
+		}
+		
+		return $result;
+	}
+
+	function getLatestOrderId($conn, $customerid) {
+		$query = "SELECT orderid FROM orders 
+				  WHERE customerid = ? 
+				  ORDER BY orderid DESC 
+				  LIMIT 1";
+				  
+		$stmt = mysqli_prepare($conn, $query);
+		mysqli_stmt_bind_param($stmt, "i", $customerid);
+		mysqli_stmt_execute($stmt);
+		$result = mysqli_stmt_get_result($stmt);
+		
+		if(!$result) {
+			throw new Exception("Failed to retrieve order ID: " . mysqli_error($conn));
+		}
+		
+		$row = mysqli_fetch_assoc($result);
+		return $row['orderid'] ?? null;
+	}
 ?>

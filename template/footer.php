@@ -7,6 +7,7 @@
         	<div class="text-muted pull-right">
           		<a href="login.php">Admin Login</a> 2017
         	</div>
+			<pre><?php print_r($_SESSION); ?></pre>
       	</footer>
     </div> <!-- /container -->
 

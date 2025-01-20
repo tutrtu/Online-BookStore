@@ -40,6 +40,7 @@
 				mysqli_query($conn, $sql);
 				if(mysqli_affected_rows($conn) == 1){
 					$_SESSION['admin'] = true;
+					$_SESSION['admin_name'] = $name;
 					header("Location: admin_book.php");
 				} else {
 					$_SESSION['admin'] = false;

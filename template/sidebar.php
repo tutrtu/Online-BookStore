@@ -6,7 +6,7 @@
       <div class="sidebar">
         <div class="list-group">
           <h3 class="list-group-item active">My Account</h3>
-          <a href="edit_profile.php" class="list-group-item">
+          <a href="profile.php" class="list-group-item">
             <span class="glyphicon glyphicon-user"></span> Edit Profile
           </a>
           <a href="my_books.php" class="list-group-item">

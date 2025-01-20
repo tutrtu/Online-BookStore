@@ -35,13 +35,17 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['submit'])) {
     insertIntoOrder($customer_id, $total_price, $order_date, $customername, $address, $city, $zip_code, $country);
 
     // Retrieve the order ID
-    $order_id = getOrderId($conn, $customer_id);
-
+    $order_id = getLatestOrderId($conn, $customer_id);
+    //echo $order_id to debug 
+    if(!$order_id){
+        echo "Order ID not found!";
+        exit;
+    }
     // Insert each cart item into the `order_items` table
     foreach($_SESSION['cart'] as $isbn => $qty){
 		$bookprice = getbookprice($isbn);
 		$query = "INSERT INTO order_items VALUES 
-		('$orderid', '$isbn', '$bookprice', '$qty')";
+		('$order_id', '$isbn', '$bookprice', '$qty')";
 		$result = mysqli_query($conn, $query);
 		if(!$result){
 			echo "Insert value false!" . mysqli_error($conn2);
@@ -53,7 +57,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['submit'])) {
     unset($_SESSION['cart']);
     unset($_SESSION['total_items']);
     unset($_SESSION['total_price']);
-    unset($_SESSION['customername']);
+   
 
     // Redirect to a success page or confirmation page
     header("Location: order_success.php");

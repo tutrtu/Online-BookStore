@@ -44,7 +44,7 @@
           <li>
             <!-- PHP login/logout logic -->
             <?php if (isset($_SESSION['user']) && $_SESSION['user']): ?>
-              <a href="logout.php"><span class="glyphicon glyphicon-off"></span>&nbsp; Logout</a>
+              <a href="user_logout.php"><span class="glyphicon glyphicon-off"></span>&nbsp; Logout</a>
             <?php else: ?>
               <a href="user_login.php"><span class="glyphicon glyphicon-user"></span>&nbsp; Login</a>
             <?php endif; ?>

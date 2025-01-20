@@ -4,12 +4,12 @@
 	$title = "List book";
 	require_once "./template/header.php";
 	require_once "./functions/database_functions.php";
-
+	require_once "./template/sidebar_admin.php";
 	$conn = db_connect();
 	$result = getAll($conn);
 ?>
 	<p class="lead"><a href="admin_add.php">Add new book</a></p>
-	<a href="admin_signout.php" class="btn btn-primary">Sign out!</a>
+	<h2>List of books</h2>
 	<table class="table" style="margin-top: 20px">
 		<tr>
 			<th>ISBN</th>
