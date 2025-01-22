@@ -62,7 +62,7 @@
         <h1>Welcome to online CSE bookstore</h1>
         <p class="lead"></p>
         <p>The layout use Bootstrap to make it more responsive. It's just a simple web!</p>
-        <pre><?php print_r($_SESSION); ?></pre>
+        
         <?php
         if (isset($_SESSION['name'])) {
         ?>

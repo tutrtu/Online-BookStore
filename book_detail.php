@@ -43,10 +43,7 @@
             <td>Publisher</td>
             <td><?php echo getPubName($conn, $row['publisherid']); ?></td>
           </tr>
-          <tr>
-            <td>Published Date</td>
-            <td><?php echo $row['book_published_date']; ?></td>
-          </tr>
+          
           <tr>
             <td>Price</td>
             <td><?php echo getbookprice($row['book_isbn']); ?></td>

@@ -4,6 +4,7 @@
 	$title = "Edit book";
 	require_once "./template/header.php";
 	require_once "./functions/database_functions.php";
+	require_once "./template/sidebar_admin.php";
 	$conn = db_connect();
     
 	if(isset($_GET['bookisbn'])){

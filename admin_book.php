@@ -8,8 +8,13 @@
 	$conn = db_connect();
 	$result = getAll($conn);
 ?>
-	<p class="lead"><a href="admin_add.php">Add new book</a></p>
-	<h2>List of books</h2>
+	<div style="display: flex; justify-content: space-between;">
+		
+	<h2>List of books </h2>
+	<p ><a href="admin_add.php">Add new book</a></p>
+	
+	</div>
+	
 	<table class="table" style="margin-top: 20px">
 		<tr>
 			<th>ISBN</th>
@@ -41,5 +46,3 @@
 	if(isset($conn)) {mysqli_close($conn);}
 	require_once "./template/footer.php";
 ?>
-
-

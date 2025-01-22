@@ -8,8 +8,8 @@ require_once "./template/sidebar_admin.php";
 $conn = db_connect();
 $result = getAllPub($conn);
 ?>
-<p class="lead"><a href="admin_add_pub.php">Add new publisher</a></p>
-<h2>List of publisher</h2>
+<p class="lead text-end"><a href="admin_add_pub.php">Add new publisher</a></p>
+<h2 class="text-end">List of publisher</h2>
 <table class="table" style="margin-top: 20px">
     <tr>
         <th>Publisher</th>
@@ -28,7 +28,7 @@ $result = getAllPub($conn);
                     onclick="return confirm('Are you sure you want to delete this publisher?');">
                     <i class="bi bi-trash"></i> Delete
                 </a>
-            </td>x
+            </td>
         </tr>
     <?php } ?>
 </table>

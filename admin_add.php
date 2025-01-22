@@ -4,6 +4,7 @@ require_once "./functions/admin.php";
 $title = "List book";
 require_once "./template/header.php";
 require_once "./functions/database_functions.php";
+require_once "./template/sidebar_admin.php";
 //check session
 // Check session for admin authentication
 if (!isset($_SESSION['admin']) || $_SESSION['admin'] !== true) {
