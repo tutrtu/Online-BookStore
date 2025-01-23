@@ -41,7 +41,7 @@
           </tr>
           <tr>
             <td>Publisher</td>
-            <td><?php echo getPubName($conn, $row['publisherid']); ?></td>
+            <td><?php echo ($row['publisher_name']) ?></td>
           </tr>
           
           <tr>
@@ -49,8 +49,12 @@
             <td><?php echo getbookprice($row['book_isbn']); ?></td>
           </tr>
           <tr>
-            <td>Publisher</td>
-            <td><?php echo $row['publisher_name']; ?></td>
+            <td>Categories</td>
+            <td><?php echo $row['categories']; ?></td>
+          </tr>
+          <tr>
+            <td>Tags</td>
+            <td><?php echo $row['tags']; ?></td>
           </tr>
         </table>
         <?php

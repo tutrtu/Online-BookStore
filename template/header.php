@@ -1,3 +1,9 @@
+<?php
+require_once "./functions/database_functions.php";
+$conn = db_connect();
+$cat = getCategoryWithBookCount($conn);
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -38,9 +44,23 @@
           <!-- link to books.php -->
           <li><a href="book.php"><span class="glyphicon glyphicon-book"></span>&nbsp; Books</a></li>
           <!-- link to contacts.php -->
-          <li><a href="contact.php"><span class="glyphicon glyphicon-phone-alt"></span>&nbsp; Contact</a></li>
+          <li><a href="profile.php"><span class="glyphicon glyphicon-phone-alt"></span>&nbsp; My Profile</a></li>
           <!-- link to shopping cart -->
           <li><a href="cart.php"><span class="glyphicon glyphicon-shopping-cart"></span>&nbsp; My Cart</a></li>
+          <li class="dropdown">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+              Categories <span class="caret"></span>
+            </a>
+            <ul class="dropdown-menu scrollable-menu">
+              <?php foreach ($cat as $cate) { ?>
+                <li><a href="bookPerCate.php?catname=<?php echo htmlspecialchars($cate['category'], ENT_QUOTES, 'UTF-8'); ?>">
+                    <?php echo htmlspecialchars($cate['category'], ENT_QUOTES, 'UTF-8'); ?>
+                  </a></li>
+              <?php } ?>
+              <li><a href="categories.php">All Categories</a></li>
+            </ul>
+
+          </li>
           <li>
             <!-- PHP login/logout logic -->
             <?php if (isset($_SESSION['user']) && $_SESSION['user']): ?>
@@ -62,7 +82,8 @@
         <h1>Welcome to online CSE bookstore</h1>
         <p class="lead"></p>
         <p>The layout use Bootstrap to make it more responsive. It's just a simple web!</p>
-        
+        <h5>name : taitap pass : 123</h5>
+        <h5>Admin name : admin pass : 123</h5>
         <?php
         if (isset($_SESSION['name'])) {
         ?>
@@ -73,3 +94,10 @@
   <?php } ?>
 
   <div class="container" id="main">
+  <style>
+  .scrollable-menu {
+    max-height: 300px; /* Adjust the height as needed */
+    overflow-y: auto;
+    overflow-x: hidden;
+  }
+</style>
