@@ -54,6 +54,37 @@ $conn = db_connect();
                 </select>
             </td>
         </tr>
+        <!-- Categories Multiselect -->
+    <tr>
+        <th>Categories</th>
+        <td>
+            <select name="categories[]" class="form-multi-select" id="ms1" multiple data-coreui-search="global">
+                <?php
+                $categories = getAllCategories($conn);
+                foreach ($categories as $category) {
+                    echo "<option value=\"" . $category['category_id'] . "\">" 
+                         . $category['category'] . "</option>";
+                }
+                ?>
+            </select>
+        </td>
+    </tr>
+    
+    <!-- Tags Multiselect -->
+    <tr>
+        <th>Tags</th>
+        <td>
+            <select name="tags[]" multiple required>
+                <?php
+                $tags = getAllTags($conn);
+                foreach ($tags as $tag) {
+                    echo "<option value=\"" . $tag['tag_id'] . "\">" 
+                         . $tag['tag_name'] . "</option>";
+                }
+                ?>
+            </select>
+        </td>
+    </tr>
         <tr>
             <td>&nbsp;</td>
             <td><input type="submit" name="add" value="Add new book" class="btn btn-primary"></td>
@@ -96,14 +127,48 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
             $image = null; // No image uploaded
         }
 
-        // Insert into database using mysqli
-        $query = "INSERT INTO books (book_isbn, book_title, book_author, book_descr, book_price, book_image, publisherid) 
-                  VALUES ('$isbn', '$title', '$author', '$descr', '$price', '$image', '$publisher')";
+        // Start a database transaction for data integrity
+        mysqli_begin_transaction($conn);
 
-        if (mysqli_query($conn, $query)) {
-            echo "<p class='text-success'>Book added successfully.</p>";
-        } else {
-            echo "<p class='text-danger'>Error adding book: " . mysqli_error($conn) . "</p>";
+        try {
+            // Insert book details
+            $query = "INSERT INTO books (book_isbn, book_title, book_author, book_descr, book_price, book_image, publisherid) 
+                      VALUES ('$isbn', '$title', '$author', '$descr', '$price', '$image', '$publisher')";
+            
+            if (!mysqli_query($conn, $query)) {
+                throw new Exception("Error adding book: " . mysqli_error($conn));
+            }
+
+            // Insert Categories
+            if (isset($_POST['categories']) && is_array($_POST['categories'])) {
+                foreach ($_POST['categories'] as $category_id) {
+                    $category_query = "INSERT INTO book_categories (book_isbn, category_id) 
+                                       VALUES ('$isbn', '$category_id')";
+                    if (!mysqli_query($conn, $category_query)) {
+                        throw new Exception("Error adding categories: " . mysqli_error($conn));
+                    }
+                }
+            }
+
+            // Insert Tags
+            if (isset($_POST['tags']) && is_array($_POST['tags'])) {
+                foreach ($_POST['tags'] as $tag_id) {
+                    $tag_query = "INSERT INTO book_tags (book_isbn, tag_id) 
+                                  VALUES ('$isbn', '$tag_id')";
+                    if (!mysqli_query($conn, $tag_query)) {
+                        throw new Exception("Error adding tags: " . mysqli_error($conn));
+                    }
+                }
+            }
+
+            // Commit the transaction
+            mysqli_commit($conn);
+            echo "<p class='text-success'>Book added successfully with categories and tags.</p>";
+
+        } catch (Exception $e) {
+            // Rollback the transaction on any error
+            mysqli_rollback($conn);
+            echo "<p class='text-danger'>" . $e->getMessage() . "</p>";
         }
     }
 }

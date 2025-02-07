@@ -9,7 +9,7 @@
 
 	$name = trim($_POST['name']);
 	$pass = trim($_POST['pass']);
-
+	
 	if($name == "" || $pass == ""){
 		echo "Name or Pass is empty!";
 		exit;

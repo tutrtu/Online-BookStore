@@ -24,6 +24,12 @@
                     <a href="admin_role.php" class="list-group-item list-group-item-action">
                         <i class="bi bi-person-badge me-2"></i>Manage Roles
                     </a>
+                    <a href="admin_categories.php" class="list-group-item list-group-item-action">
+                        <i class="bi bi-person-badge me-2"></i>Manage categories
+                    </a>
+                    <a href="admin_tags.php" class="list-group-item list-group-item-action">
+                        <i class="bi bi-person-badge me-2"></i>Manage tags
+                    </a>
                     <a href="logout.php" class="list-group-item list-group-item-action text-danger">
                         <i class="bi bi-box-arrow-right me-2"></i>Sign Out
                     </a>

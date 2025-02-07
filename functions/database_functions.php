@@ -9,6 +9,11 @@ function db_connect()
 	return $conn;
 }
 
+function getAllTags($conn) {
+    $query = "SELECT * FROM tags ORDER BY tag_name";
+    $result = mysqli_query($conn, $query);
+    return $result;
+}
 function select4LatestBook($conn)
 {
 	$row = array();
@@ -204,7 +209,7 @@ function getAllPub($conn)
 
 function getAll($conn)
 {
-	$query = "SELECT * from books join publisher on books.publisherid = publisher.publisherid";
+	$query = "SELECT * from books join publisher on books.publisherid = publisher.publisherid" ;
 	$result = mysqli_query($conn, $query);
 	if (!$result) {
 		echo "Can't retrieve data " . mysqli_error($conn);
@@ -345,19 +350,29 @@ WHERE c.category = '$tag'";
 	return $result;
 }
 
-function getCategoryWithBookCount($conn)
-{
-	$query = "SELECT c.category, COUNT(DISTINCT bc.book_isbn) as book_count 
-          FROM categories c
-          LEFT JOIN book_categories bc ON c.category_id = bc.category_id
-          GROUP BY c.category_id, c.category
-          ORDER BY c.category ASC";
-	$result = mysqli_query($conn, $query);
-	if (!$result) {
-		echo "Can't retrieve data " . mysqli_error($conn);
-		exit;
-	}
-	return $result;
+function getCategoryWithBookCount($conn) {
+    $query = "SELECT c.category, COUNT(bc.book_isbn) as book_count 
+              FROM categories c
+              LEFT JOIN book_categories bc ON c.category_id = bc.category_id
+              GROUP BY c.category_id, c.category
+              ORDER BY book_count DESC";
+    
+    $result = mysqli_query($conn, $query);
+    
+    if ($result) {
+        // Check if there are any rows
+        if (mysqli_num_rows($result) > 0) {
+            return $result;
+        } else {
+            // Log that no categories were found
+            error_log("No categories found in getCategoryWithBookCount()");
+            return false;
+        }
+    } else {
+        // Log the database error
+        error_log("Database error in getCategoryWithBookCount(): " . mysqli_error($conn));
+        return false;
+    }
 }
 
 function getTop4Sales($conn)
@@ -380,4 +395,14 @@ LIMIT 4";
 		exit;
 	}
 	return $result;
+}
+
+function getAllCategories($conn) {
+
+    $query = "SELECT * FROM categories";
+
+    $result = mysqli_query($conn, $query);
+
+    return $result;
+
 }

@@ -1,11 +1,28 @@
 <?php
-session_start();
-$title = "Index";
-require_once "./template/header.php";
-require_once "./functions/database_functions.php";
-require_once "./template/sidebar_category.php";
-$conn = db_connect();
-$query = getAll($conn);
+session_start(); 
+$title = "Index"; 
+require_once "./template/header.php"; 
+require_once "./functions/database_functions.php"; 
+
+$conn = db_connect(); 
+
+// Pagination setup
+$results_per_page = 12; // 4 columns * 3 rows
+$page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
+$page = max(1, $page); // Ensure page is at least 1
+
+// Calculate offset
+$offset = ($page - 1) * $results_per_page;
+
+// Get total number of books
+$total_books_query = mysqli_query($conn, "SELECT COUNT(*) AS total FROM books");
+$total_books = mysqli_fetch_assoc($total_books_query)['total'];
+
+// Calculate total pages
+$total_pages = ceil($total_books / $results_per_page);
+
+// Modify the getAll function in database_functions.php to support pagination
+$query = mysqli_query($conn, "SELECT * FROM books LIMIT $results_per_page OFFSET $offset");
 
 // Convert mysqli_result to array
 $row = [];
@@ -61,14 +78,43 @@ while ($book = mysqli_fetch_assoc($query)) {
         font-size: 1.2em;
         display: block;
     }
-</style>
 
+    .pagination {
+        display: flex;
+        justify-content: center;
+        margin-top: 20px;
+    }
+
+    .pagination a, .pagination span {
+        color: black;
+        float: left;
+        padding: 8px 16px;
+        text-decoration: none;
+        transition: background-color .3s;
+        border: 1px solid #ddd;
+        margin: 0 4px;
+    }
+
+    .pagination a:hover {
+        background-color: #ddd;
+    }
+
+    .pagination .active {
+        background-color: #4CAF50;
+        color: white;
+        border: 1px solid #4CAF50;
+    }
+    .pagination {
+        display: flex;
+        justify-content: center;
+    margin-top: 20px;
+    margin-bottom: 30px;
+    }
+</style>
 
 <div class="container">
     <div class="row">
-        <?php require_once "./template/sidebar_category.php"; ?>
         <div class="col-md-9">
-            <!-- Main content code here -->
             <div class="container">
                 <div class="row">
                     <div class="col-md-12">
@@ -78,7 +124,7 @@ while ($book = mysqli_fetch_assoc($query)) {
 
                 <?php
                 $count = 0;
-                $total_books = count($row);
+                $total_books_on_page = count($row);
 
                 foreach ($row as $book) {
                     if ($count % 4 == 0) {
@@ -97,22 +143,49 @@ while ($book = mysqli_fetch_assoc($query)) {
                     </div>
                 <?php
                     $count++;
-                    if ($count % 4 == 0 || $count == $total_books) {
+                    if ($count % 4 == 0 || $count == $total_books_on_page) {
                         echo '</div>';
                     }
                 }
 
-                if ($total_books % 4 != 0 && $count % 4 != 0) {
+                if ($total_books_on_page % 4 != 0 && $count % 4 != 0) {
                     echo '</div>';
                 }
                 ?>
             </div>
+
+            <!-- Pagination -->
+            
         </div>
     </div>
+    <div class="pagination">
+                <?php
+                // Previous page link
+                if ($page > 1) {
+                    echo "<a href='?page=" . ($page - 1) . "'>«</a>";
+                }
+
+                // Page numbers
+                for ($i = 1; $i <= $total_pages; $i++) {
+                    if ($i == $page) {
+                        echo "<span class='active'>$i</span>";
+                    } else {
+                        echo "<a href='?page=$i'>$i</a>";
+                    }
+                }
+
+                // Next page link
+                if ($page < $total_pages) {
+                    echo "<a href='?page=" . ($page + 1) . "'>»</a>";
+                }
+                ?>
+            </div>
 </div>
+
 <?php
+ 
 if (isset($conn)) {
-    mysqli_close($conn);
-}
-require_once "./template/footer.php";
+    mysqli_close($conn); 
+} 
+require_once "./template/footer.php"; 
 ?>

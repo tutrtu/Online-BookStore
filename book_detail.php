@@ -1,70 +1,63 @@
 <?php
-  session_start();
-  $book_isbn = $_GET['bookisbn'];
-  $count = 0;
-  
+session_start();
+$book_isbn = $_GET['bookisbn'];
+$count = 0;
 
-  $title = "Index";
-  require_once "./template/header.php";
-  require_once "./functions/database_functions.php";
-  $conn = db_connect();
-  $result = getBookByIsbn($conn, $book_isbn);
+$title = "Book Detail";
+require_once "./template/header.php";
+require_once "./functions/database_functions.php";
+$conn = db_connect();
+$result = getBookByIsbn($conn, $book_isbn);
 ?>
-      <!-- Example row of columns -->
-        <p class="lead text-center text-muted">Book Detail</p>
-        <?php
-          if(mysqli_num_rows($result) == 0) {
-            echo "<p class=\"text-danger\">We are sorry, but the book is not available.</p>";
-          } else {
-            $row = mysqli_fetch_assoc($result);
-        ?>
-        <table class="table">
-          <tr>
-            <td>Image</td>
-            <td><img class="img-responsive img-thumbnail" src="./bootstrap/img/<?php echo $row['book_image']; ?>"></td>
-          </tr>
-          <tr>
-            <td>ISBN</td>
-            <td><?php echo $row['book_isbn']; ?></td>
-          </tr>
-          <tr>
-            <td>Title</td>
-            <td><?php echo $row['book_title']; ?></td>
-          </tr>
-          <tr>
-            <td>Author</td>
-            <td><?php echo $row['book_author']; ?></td>
-          </tr>
-          <tr>
-            <td>Description</td>
-            <td><?php echo $row['book_descr']; ?></td>
-          </tr>
-          <tr>
-            <td>Publisher</td>
-            <td><?php echo ($row['publisher_name']) ?></td>
-          </tr>
-          
-          <tr>
-            <td>Price</td>
-            <td><?php echo getbookprice($row['book_isbn']); ?></td>
-          </tr>
-          <tr>
-            <td>Categories</td>
-            <td><?php echo $row['categories']; ?></td>
-          </tr>
-          <tr>
-            <td>Tags</td>
-            <td><?php echo $row['tags']; ?></td>
-          </tr>
-        </table>
-        <?php
-          }
-        ?>
+
+<div class="container book-detail-page">
+  <?php
+  if (mysqli_num_rows($result) == 0) {
+    echo "<p class='text-danger text-center'>We are sorry, but the book is not available.</p>";
+  } else {
+    $row = mysqli_fetch_assoc($result);
+  ?>
+    <div class="row">
+      <!-- Book Image -->
+      <div class="col-md-4">
+        <img src="./bootstrap/img/<?php echo $row['book_image']; ?>" alt="<?php echo $row['book_title']; ?>" class="img-fluid img-thumbnail">
+      </div>
+
+      <!-- Book Details -->
+      <div class="col-md-8">
+        <h2><?php echo $row['book_title']; ?></h2>
+        <p class="text-muted">By: <span class="text-primary"><?php echo $row['book_author']; ?></span></p>
+        <h3 class="text-danger"><?php echo getbookprice($row['book_isbn']); ?> $</h3>
+        <p><strong>Publisher:</strong> <?php echo $row['publisher_name']; ?></p>
+        <p><strong>Released Date:</strong> 2015</p>
+        <p><strong>ISBN:</strong> <?php echo $row['book_isbn']; ?></p>
         <form method="post" action="cart.php">
-            <input type="hidden" name="bookisbn" value="<?php echo $book_isbn;?>">
-            <input type="submit" value="Purchase / Add to cart" name="cart" class="btn btn-primary">
-          </form>
+          <input type="hidden" name="bookisbn" value="<?php echo $book_isbn; ?>">
+          <input type="submit" value="Purchase / Add to cart" name="cart" class="btn btn-primary">
+        </form>
+
+
+
+      </div>
+    </div>
+
+    <!-- Book Overview -->
+    <div class="row mt-5">
+      <div class="col-md-12">
+        <h4>Book Overview</h4>
+        <p><?php echo $row['book_descr']; ?></p>
+        <p><strong>Categories:</strong> <?php echo $row['categories']; ?></p>
+        <p><strong>Tags:</strong> <?php echo $row['tags']; ?></p>
+      </div>
+    </div>
+  <?php
+  }
+  if (isset($conn)) {
+    mysqli_close($conn);
+  }
+  ?>
+</div>
+
 <?php
-  if(isset($conn)) {mysqli_close($conn);}
-  require_once "./template/footer.php";
+require_once "./template/footer.php";
 ?>

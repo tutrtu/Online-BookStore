@@ -26,6 +26,7 @@ $result = getCategoryWithBookCount($conn);
         </div>
     </div>
 </div>
+<div class="col-md-9">
 
 <style>
 .sidebar {

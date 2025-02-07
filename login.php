@@ -2,7 +2,7 @@
 	session_start();
 	$title = "Administration section";
 	require_once "./template/header.php";
-	include "./functions/database_functions.php";
+	require_once "./functions/database_functions.php";
 ?>
 
 	<form class="form-horizontal" action="<?php htmlspecialchars($_SERVER["PHP_SELF"]) ?>" method="post">
